@@ -1,4 +1,4 @@
-\documentclass{aastex62}
+\documentclass[twocolumn]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -23,7 +23,7 @@
 %%
 %% Note that you can submit to the AAS Journals in any of these 6 styles.
 %%
-%% There are other optional arguments one can envoke to allow other stylistic
+%% There are other optional arguments one can invoke to allow other stylistic
 %% actions. The available options are:
 %%
 %%  astrosymb    : Loads Astrosymb font and define \astrocommands. 
@@ -59,6 +59,28 @@
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
 \newcommand\latex{La\TeX}
+\newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}
+\newcommand{\figref}[1]{Figure \ref{#1}}
+
+\newcommand{\code}[1]{\ensuremath{\textsf{#1}}}
+\newcommand{\lare}{\code{LARE}}
+\newcommand{\scipy}{\code{scipy}}
+\newcommand{\fnc}[1]{\code{#1}}
+\newcommand{\removecomment}[1]{\textcolor{red}{#1}}
+\newcommand{\secref}[1]{$\S$\ref{#1}}
+
+% IBIS fitting macros
+\newcommand{\halpha}{\ensuremath{H\alpha}}
+\newcommand{\hfit}{\ensuremath{\halpha_\mathit{fit} }}
+\newcommand{\linecenter}{\ensuremath{\lambda_0}}
+\newcommand{\linew}{\ensuremath{\delta \lambda}}
+\newcommand{\imin}{\ensuremath{I_\mathit{min}}}
+\newcommand{\ihalf}{\ensuremath{I_\mathit{half}}}
+
+% comments
+\newcommand{\latcomment}[1]{\textcolor{red}{LAT: #1}}
+\newcommand{\saj}[1]{\textcolor{cyan}{SAJ: #1}}
+\newcommand{\ark}[1]{\textcolor{purple}{ARK: #1}}
 
 %% Tells LaTeX to search for image files in the 
 %% current directory as well as in the figures/ folder.
@@ -102,7 +124,7 @@
 %%
 %% If you wish, you may supply running head information, although
 %% this information may be modified by the editorial offices.
-\shorttitle{The Kolsch of Data Sets}
+\shorttitle{The K\"{o}lsch of Data Sets}
 \shortauthors{Kobelski et al.}
 %%
 %% You can add a light gray and diagonal water-mark to the first page 
@@ -122,179 +144,441 @@
 
 \title{Transient brightenings observed with multiple instruments}
 \correspondingauthor{Adam R. Kobelski}
-\email{adam.kobelski@mail.wvu.edu, ltarr2@gmu.edu, sjaeggli@nso.edu, sabrina.savage@nasa.gov}
+\email{adam.kobelski@mail.wvu.edu}
 
-\author{Adam R. Kobelski}
+\author[0000-0002-4691-1729]{Adam R. Kobelski}
+\affiliation{NASA Marshall Space Flight Center}
 \affiliation{West Virginia University}
 
+
 \author[0000-0002-8259-8303]{Lucas A. Tarr}
-\affiliation{George Mason University}
-
-\author{Sarah Jaeggli}
 \affiliation{National Solar Observatory}
-
+%\email{ltarr@nso.edu}
+\author[0000-0001-5459-2628]{Sarah Jaeggli}
+\affiliation{National Solar Observatory}
+%\email{sjaeggli@nso.edu}
+\author{Nicholas Luber}
+\affiliation{West Virginia University}
 %% The \author command can take an optional ORCID.
-\author{Sabrina Savage}
+\author[0000-0001-6102-6851]{Harry P. Warren}
+\affiliation{Naval Research Laboratory}
+%\email{harry.warren@nrl.navy.mil}
+\author[0000-0002-6172-0517]{Sabrina Savage}
 \affiliation{NASA Marshall Space Flight Center}
+%\email{sabrina.savage@nasa.gov}
+
 \begin{abstract}
-Here is our abstract.  We did work
+%Transient brightenings (TBs) are ubiquitous features of the solar atmosphere across many length and energy scales, the most energetic of which manifest as large-class solar flares. TBs typically originate in regions of enhanced magnetic flux and are observed as increased emission across wavelengths from X-ray to radio, with notable dynamics on timescales of seconds to hours. Coronal TBs are often studied using Extreme Ultravioliet (EUV) and X-ray imaging and spectra. TBs likely originate from photospheric activity such as flux emergence, but are proximately driven by energy transfer through the chromosphere, either by convective waves, direct ejection of chromospheric material, or reconnection. Chromospheric and transition region observations of these events have only become routine in the last decade. 
+%Chromospheric and transition region observations of these events have not been routine for the last few decades. 
+New instruments sensitive to chromospheric radiation at X-ray, UV, Visible, IR, and sub-mm wavelengths have become available that significantly enhance our ability to understand the bi-directional flow of energy through the chromosphere. In this paper, we showcase and combine a new dataset utilizing a large number of these instruments to obtain multi-wavelength chromospheric observations capable of improving our understanding of the connectivity between the photosphere and the corona in the chromosphere via transient brightenings and wave signatures. This comprehensive study provides one of the most complete views of chromospheric activity related to small scale brightenings in the corona and chromosphere to date. SOME NUMBERS, SCIENCE CONCLUSIONS.
 
 \end{abstract}
-\keywords{The Sun, Radio, XRay, EUV}
+\keywords{The Sun, Radio, X-Ray, EUV}
 
 \section{Introduction} \label{sec:intro}
-Our work is awesome, here's why
-\section{Observations} \label{sec:Obs}
-\subsection{IBIS}
-The IBIS data was reduced primarily using the pipeline code provided by NSO\footnote{Version 1.4, available here: https://www.nso.edu/telescopes/dunn-solar-telescope/dst-pipelines/}
+The methods of transporting energy from the photosphere through the chromosphere to the million degree corona have been debated since the discovery of the hot corona \citep[][]{1933LyotMarshall, 1939Grotrian}. 
+The underlying problem is that thermal conduction, which is very efficient in solar plasmas, will transport energy from the corona to the chromosphere, so the energy in the corona must constantly be resupplied.  
+One of the early ideas for this transport of energy was via wave activity through hydrodynamic shocks \citep[][]{1949Schatzman} and later, once the central role of magnetic fields on the Sun was fully realized, by magnetoacoustic or Alfv\'en waves \citep{1961Osterbrock}. 
+In this scenario, convective energy drives the waves which carry energy as they propagate upward through to the corona, and eventually deposit that energy as they cascade to small length-scales and heat the plasma through dissipation \citep{2014vanBallegooijenEA_FootpointMotion}.
 
+Coronal waves have been observed in many forms. 
+Large amplitude standing and propagating waves are caused by both confined flares and CMEs, and their properties are comparatively easy to detect and quantify \citep{2014LiuOfman_EUVwaves}. 
+At the same time, many quiescent coronal structures exhibit continuous oscillatory power, detectable using Fourier transform or wavelet methods of longer time series \citep{Tomczyk:2009}, indicating that a broad spectrum of waves are present throughout the chromosphere and corona.
+While the presence of waves is uncontested, where, by what mechanism, and how much wave energy may be dissipated to heat the coronal plasma is currently not well understood \citep{2014vanBallegooijenEA_FootpointMotion}.
+
+As an alternative to wave heating, it has been posited that small-scale magnetic reconnection via nanoflares \citep[][]{1983Parker} could be responsible for the heating of the corona. 
+It was thought that these nanoflares would manifest themselves as small scale brightenings in the corona, sometimes referred to as microflares or active region transient brightenings \citep[][]{1984LinEA_microflares, 1991Hudson, 1992ShimizuEA, 1995Shimizu}. 
+\citet{1997GaryEA} determined that the small scale-brightenings exhibit the same signatures of particle acceleration as larger solar flares and concluded that many of the transient brightenings (TBs) were also products of magnetic reconnection. \latcomment{Reference some of the NuSTAR or Foxi work about this?} 
+A key suggestion of the Parker nanoflare model was that the reconnection would occur due to substructure in the magnetic field lines, in which the observed loops consist of many unresolved braided magnetic strands. 
+The concept of unresolved strands is in agreement with forward models of the observations \citep[e.g.][]{2012BrooksEA, 2014KobelskiEA_XRTTBs, 2014KobelskiMcKenzie_HiC}, and has been strongly suggested by direct observation in extreme ultraviolet (EUV) with the Hi-C sounding rocket \citep[][]{2013CirtainEA_HiC}. 
+
+Microflare research has largely focused on observable transients, which implies ``low-frequency'' active region heating wherein a larger plasma element, such as an overlying coronal loop, is heated significantly enough to show enhanced emission compared to the background and then notably cools over time \citep[][]{2015Klimchuk_CHoverview}. 
+This scenario is in contrast to ``high-frequency'' heating wherein the observable plasma elements experience heating events fast enough that they appear at a sustained temperature and density, i.e. they are not allowed to cool or drain between successive heating events. 
+Sometimes assumed in this latter paradigm is that the individual microflares occur on unresolved spatial and temporal scales, such that while individual strands may cool and/or drain, the conglomerated strand appears to have a steady average density and temperature \citep[e.g.][]{2013BrooksEA_LoopSize, 2014SubramanianEA_LowAndHighFrequency, 2016SchmelzEA}. 
+
+One of the best ways to follow how plasma flows through the chromosphere and corona is by using emission and absorption spectral measurements. 
+For stable loops, raster scans from the \textit{Hinode} EUV Imaging Spectrograph (EIS) and the Interface Region Imaging Spectrograph (IRIS) have been used to better constrain the rate of heating quiescent regions of the Sun \citep[e.g.][]{2016BrooksWarren_NTWidths,2016TestaEA_ARLoopsIRISEIS, 2017GhoshEA_LoopsIRISEIS}. 
+To measure flows during transient events requires fortuitous pointing and specific observations with minimal rastering. 
+Here we present an ideal data set to study dynamic spectra of small scale, short lived coronal brightenings with coronal, chromospheric, and photospheric instrumentation. 
+Such studies are crucial to understanding the flow of energy into the corona, as well as provide statistical insight into this coupled system during solar flares.
+
+Much of the aforementioned work on TBs has focused on the \emph{coronal} observables, though recent instrumentation has shown evidence of chromospheric counterparts to microflaring \citep[][]{2016TestaEA_ARLoopsIRISEIS, 2017GhoshEA_LoopsIRISEIS}. 
+The chromospheric response to large flares is well established in the form of chromospheric ablation from flare ribbons \citep[][]{2017Benz_LRSP}. 
+The wave-driven chromospheric response to large flares has also been detected and investigated \citep[][and references within]{2014LiuOfman_EUVwaves, 2016RussellEA_Sunquakes}. 
+What has eluded prior studies is a comprehensive insight into how wave motion through the chromosphere relates to the occurrence of small coronal flares, as well as how small flares drive chromospheric heating and waves. 
+Evidence for this process is given by the partial temporal and spatial overlap of Ellerman bomb populations and UV burst populations, thought to be caused by energetic release at different heights \citep{2019Vissers, 2018Young}.
+This feedback loop between waves and transients can inform the bi-directional flow of energy between the chromosphere and the corona.
+
+In this paper, we present a unique, robust, and extensive data set with which to study the flow of energy through the chromosphere and the interplay between transients and wave activity. 
+Even though the data set is of a quiescent solar region, it displays notable dynamics from the photosphere to the corona. 
+This region is exemplary of the ubiquitous features found throughout the solar atmosphere during all phases of the solar cycle. 
+The type of analysis we propose has been performed for active regions and strong plage, \emph{but not quiescent regions}. 
+Since this data set probes each layer of the Sun in multiple wavelengths, heights, temperatures, and methodologies, it can provide multiple ground-truths and perspectives for which to compare to models of chromospheric energy flow and transfer in later papers.
+
+The data set includes photospheric magnetic field information from the Helioseismic and Magnetic Imager \citep[HMI,][]{2012SchouEA_HMI} as well as imaging from the Atmospheric Imaging Assembly \citep[AIA,][]{2012LemenEA_AIA} on board the Solar Dynamics Observatory \citep[SDO,][]{2012PesnellEA_SDO}; photospheric magnetic field data from the Solar Optical Telescope \citep[SOT,][]{2008TsunetaEA_SOT}, coronal X-ray imaging from the X-Ray Telescope \citep[XRT,][]{2007GolubEA_XRT}, and EUV spectra from EIS \citep{2007CulhaneEA_EIS} on board the {\it Hinode} spacecraft \citep[][]{2007KosugiEA_Hinode}; chromospheric images and spectra from IRIS \citep{2014DePontieuEA_IRIS}; spectral images from the  Interferometric BIdimensional Spectropolarimeter \citep[IBIS,][]{2006Cavallini_IBIS} and infrared spectropolarimetry from the Facility InfraRed Spectropolarimeter \citep[FIRS,][]{2010JaeggliEA_FIRS} at the Dunn Solar Telescope (DST); and millimeter wave information from the Atacama Large Millimeter Array \citep[ALMA,][]{2009WootenThompson_ALMA, 2010HillsEA_ALMA2}.
+
+In this paper, we describe the reduction of the imaging and spectral observations, as well as the co-alignment between instruments. 
+We then interpret and compare activity between atmospheric layers, though a more thorough analysis is forthcoming.  
+We give details of the observations in Section~\ref{sec:data}, their co-alignment in Section~\ref{sec:coalign} and their analysis in Section~\ref{sec:analysis}, with concluding remarks in \ref{sec:conclusion}. 
+
+\section{Data} \label{sec:data}
+\subsection{Overview and Coordination}
+The data sets presented in this work resulted from a large coordination campaign that was keyed to the ALMA observations and encompassed a suite of ground- and space-based facilities operated by different organizations.
+The observations occurred during one of the first coordinated campaigns to support PI-led solar ALMA observations. Due to constraints in the ALMA scheduling, the exact timings and pointings could only be determined the day before the actual observations, with the result that there is not always complete temporal or spatial overlap between each facility.  
+Given these constraints, the coverage is, in general, fairly good.
+
+\figref{fig:coordination} presents an overview the temporal and spatial overlap between the various instrument channels during the time of the ALMA observations. 
+In the upper panel we have ordered the instruments in the vertical direction roughly according to height in the solar atmosphere.
+In addition to the times shown here, SOT, EIS, and XRT took observations of this same region for several days leading up to the ALMA observing window.
+Fortuitously, NuSTAR also observed this region and detected two small flares around 19:00 and 19:30 UT \citep{2018Kuhar}.
+The lower left panels show the approximate fields-of-view (FOV) of the various instruments overlaid on an AIA 193\AA{} image using the same colors as the upper panel, with the left showing the full Sun and the right a zoomed in region.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/obs_timing}
+    \includegraphics[width=0.48\linewidth]{figures/AIA193_FOVs.png}
+    \includegraphics[width=0.48\linewidth]{figures/AIA193_FOVs_zoom.png}
+    \caption{Overview of all observations around the ALMA observing window.  Upper plot: timing information, where instruments are ordered vertically roughly according to height in the solar atmosphere.  Gaps in each color band indicate data gaps in that data channel.  Lower panels: approximate FOVs for each instrument using the same colors as in the upper panel, overlaid on an SDO/AIA-193\AA{} context image.}
+    \label{fig:coordination}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/IBISimg0108.eps}
+    \caption{Representative sample of co-aligned images. The SOT data has been rotated to align with the coordinate time of the IBIS data. The ALMA data ranges from $\pm$some number of K}
+    \label{fig:coordination}
+\end{figure}
+
+\subsection{SDO/AIA}\label{sec:sdoaia}
+AIA obtains full-disk images of the Sun every 12 seconds with 0.6\arcsec{} spatial sampling in a variety of visible, UV, EUV channels.
+Observations from all AIA channels are available throughout the entire coordination period.
+The Level 1 AIA data was downloaded from the Joint Science Operations Center (JSOC)\footnote{\url{http://jsoc.stanford.edu/}}, updated to Level 1.5 using \fnc{aia\_prep.pro} as described in the SDO Analysis Guide.
+We also selected a subregion that fully encompassed the ALMA target using the SSW cutout service\footnote{\url{https://www.lmsal.com/get_aia_data/}; see also \S4.3 of the SDO Analysis Guide.} for a region approximately $300\arcsec\times300\arcsec$ for the duration of the other datasets (14:00-17:00 UT on 2017-03-21).
+The 193 \AA\ channel of AIA was primarily used for co-alignment and to provide full-disk context for the other observations.  
+The 193 \AA\ bandpass includes \ion{Fe}{12} and \ion{Fe}{24} lines which form in the corona and hot plasma at log(T)=6.2 and 7.3 respectively.  
+
+
+\subsection{SDO/HMI}
+We used three days of intensity and line-of-site (LOS) magnetograms from the level 1.5 \texttt{hmi.M\_720s} and \texttt{hmi.Ic\_720s} series\footnote{JSOC query: \texttt{hmi.M\_720s[2017.03.19\_00:00:00\_TAI/3d]}, and similar for intensity.}.  
+An area $\approx330\arcsec{}\times250\arcsec{}$ was tracked using solar rotation to understand the magnetic evolution of the region leading up to and throughout the coordinated observations.  
+To ease later analysis, we derotated all HMI data so that the solar North-South axis aligned with columns of the data array, with North pointing upward, but kept the spatial scaling of the original HMI data.  
+The typical extra step of spatially-rescaling the data to match AIA  has little benefit for use given that our various datasets include many different spatial samplings.
+
+% Nick stuff, feel free to change at will, I was just getting my thoughts out.
 \subsection{ALMA}
+\paragraph{ALMA background} The Atacama Large Millimeter Array (ALMA) is a radio interferometer with current frequency coverage spanning 84 to 950 GHz. ALMA is constituted of 66 telescope dishes, 54 with a diameter of 12 meters, and 12 with a diameter of 7 meters. These 66 dishes are arranged as such to ensure that ALMA had suitable sensitivity to large scale diffuse emission, this is aided by the high density of centrally located dishes, and excellent resolution to small scale features, this is achieved with the dishes at high distance. The ALMA observations presented in this work were in the ALMA observing Band 3, which corresponds to a central frequency of 100 GHz, and a total bandwidth of 18 GHz about that central frequency. At this frequency and array configuration, our approximate resolution is 2$\arcsec$ on the sky. Our integration time used was 2 seconds and the entire observation, including the target field and calibrators, lasted for 1.03 hours. 
 
-\subsection{Hinode}
+\paragraph{ALMA calibration}
+\paragraph{ALMA self-calibration}
+\paragraph{ALMA issues with phase-center}
 
-\section{Coalignment} \label{sec:coalign}
-Coaligning the various instruments was a challenge.  We did it like this:
+\subsection{DST/IBIS}
+IBIS is a dual Fabry-Perot interferometer- (FPI-) based imaging spectropolarimeter that was mounted at the Dunn Solar Telescope.
+The FPI cavity is tuned to transmit a narrow bandpass $(\approx 2.4\unit{pm})$, and the tuning is modulated to step the bandpass over the wavelength range of the line.
+We used IBIS in spectal-only mode (no polarimetry) with a circular field stop of approximately 90\arcsec{} diameter.
+We continuously sampled the \halpha{} line between 14:46-16:55 UT using 26 wavelength positions, with $\approx 12.5\unit{pm}$ spacing near line core and $\approx 19.1\unit{pm}$ spacing in the wings.  
+Each narrow band image is paired with a strictly cotemporally acquired broad band continuum image taken in a nearby wavelength band at $660\unit{nm}$.
+The broad band image is used for speckle reconstruction, self alignment of the narrow band images, and co-alignment between the IBIS data and other data series, e.g., to the HMI continua data series. \par
 
-\startlongtable
-\begin{deluxetable}{c|cc}
-\tablecaption{ApJ costs from 1991 to 2013\tablenotemark{a} \label{tab:table}}
-\tablehead{
-\colhead{Year} & \colhead{Subscription} & \colhead{Publication} \\
-\colhead{} & \colhead{cost} & \colhead{charges\tablenotemark{b}}\\
-\colhead{} & \colhead{(\$)} & \colhead{(\$/page)}
-}
-\colnumbers
-\startdata
-1991 & 600 & 100 \\
-1992 & 650 & 105 \\
-1993 & 550 & 103 \\
-1994 & 450 & 110 \\
-1995 & 410 & 112 \\
-1996 & 400 & 114 \\
-1997 & 525 & 115 \\
-1998 & 590 & 116 \\
-1999 & 575 & 115 \\
-2000 & 450 & 103 \\
-2001 & 490 &  90 \\
-2002 & 500 &  88 \\
-2003 & 450 &  90 \\
-2004 & 460 &  88 \\
-2005 & 440 &  79 \\
-2006 & 350 &  77 \\
-2007 & 325 &  70 \\
-2008 & 320 &  65 \\
-2009 & 190 &  68 \\
-2010 & 280 &  70 \\
-2011 & 275 &  68 \\
-2012 & 150 &  56 \\
-2013 & 140 &  55 \\
-\enddata
-\tablenotetext{a}{Adjusted for inflation}
-\tablenotetext{b}{Accounts for the change from page charges to digital quanta in April, 2011}
-\tablecomments{Note that {\tt \string \colnumbers} does not work with the 
-vertical line alignment token. If you want vertical lines in the headers you
-can not use this command at this time.}
-\end{deluxetable}
+The IBIS data was reduced primarily using the pipeline code provided by NSO\footnote{Version 1.4, available here: \url{https://www.nso.edu/telescopes/dunn-solar-telescope/dst-pipelines/}.}.  
+This process aligns the broad-band and narrow-band channels and accounts for detector dark counts, flat-fielding, and the spatially-dependent wavelength shift induced by the telecentric mount of the FPIs.  
+Kevin Reardon provided several modified steps that better account for spatially- and spectrally-dependent fringes in the narrow band data due to the prefilter, as compared with the pipeline code\footnote{Reardon, private communication.  See documentation at \url{https://github.com/kreardon/IBIS.git}.}, which resulted in an improved estimate of the gain for each spatial and spectral point throughout the narrow band datacube.  
+As a final calibration step, we used the KISIP code \citep{2008WoegerSPIE,2008WoegerEA_Speckle} to perform a speckle reconstruction of the data using the IBIS broad band images that are taken strictly co-temporally with the narrow band images; the broad band data is specifically designed for this purpose\citep{2008Cauzzi}.\par
+
+We took several further steps for the IBIS preparation.  
+To correct for the several arcsecond inaccuracy of the DST blind-pointing, slight rotation of solar-North with respect to the CCD pixel arrays, and the slight difference in plate-scale between the CCD X and Y directions, we rotated, shifted, and stretched the IBIS broad band data to match the granulation pattern in nearly co-temporal HMI continuum data at time 2017-03-21 15:46:36.
+These parameters remained constant throughout the IBIS data series.
+\par
 
 
-\section{Displaying mathematics} \label{sec:displaymath}
+\subsubsection{IBIS self alignment}\label{sec:ibisselfalign}
+IBIS data in the spectral dimension is not strictly co-temporal: the time difference between successive wavelength steps is about $0.167\unit{s}$ and the cadence between images at a given wavelength is about $4.2\unit{s}$.
+Our observations were taken during periods of moderate seeing, so the image sequence has some jitter, which became significant at times.  
+To correct for this effect and spatially co-align all the IBIS data with itself we used a cross-correlation technique outlined here\footnote{The \texttt{chi2\_shift} method from Adam Ginsburg's \texttt{image\_registration} python package.  See \url{https://github.com/keflavich/image_registration}.}: 
+\begin{enumerate}
+    {\item We manually determined ``bad frames'' when AO lock was lost or a frame became significantly distorted, by inspecting the strictly co-temporal broad band images; these frames were assumed bad for all wavelengths in a given scan of the line.}
+    {\item We generated a reference image by taking the running-average of the previous 5 registered ``good'' scans through the spectral line: at 26 images per scan, the average involves 130 broad band images.
+    The initial average reference image was taken to be the average of the first spectral scan from the dataset.}
+    {\item We used \texttt{chi2\_shift} to determine the spatial offset between each of the broad band images in a scan and the average reference image.}
+    {\item If the frame was labeled ``good,'' the final registered broad band image for each wavelength was appended to running average.}
+    {\item The measured offset was then saved, to be applied later to both the broad band image and the cotemporal narrow band image, which will co-align the entire data series (this last step has already been performed on the provided IBIS FITS files).}
+\end{enumerate}
 
+The above method allowed essentially all 46,800 frames to be co-aligned while being robust against the occasional loss of AO during brief periods of poor seeing.\par
 
+\subsection{DST/FIRS}
+During the coordinated observations, FIRS first conducted a raster observation from 14:46:47 to 15:00:54 UT (08:46:47 to 11:00:54 am MDT).  Then sit-and-stare observations were run almost continuously from 15:02:36 to 16:57:42 UT with small gaps for adjustment of the adaptive optics system.  During these observations, FIRS was configured to use the 40 $\mu$m single slit with the f/36 feed optics, which provide a slit width of 0.3 arcsec on the sky.  The vertical extent of the slit covered approximately 74 arcsec.  Only the 10830 \AA\ channel of FIRS was used, and the narrow band filter was removed to take advantage of the maximum wavelength coverage possible with the detector.  In this configuration the spectrograph was able to cover a 40 \AA\ bandpass centered at 10834 \AA.  This region contains the Si I and He I 1083 nm lines commonly used for spectropolarimetry, as well as several other solar and telluric lines.  The spectral dispersion of 3.86 pm/pixel is approximately equal to the spectral resolution of the instrument at this wavelength, based on laser profile measurements \citep{2011Jaeggli_PHD}.  An exposure time of 125 msec was used to keep counts within the range of linear behavior for the HgCdTe detector.  The liquid crystal variable retarders ran two repeats of a 4-state modulation sequence, and the time to execute a complete polarization measurement was about 4 seconds.
 
-\section{Revision tracking and color highlighting} \label{sec:highlight}
+A camera was set up to reimage the light from the mirrored surface of the FIRS slit.  These slit-jaw images were obtained to assist in co-alignment and cover a $185\times155$ arcsec$^2$ field of view with 0.153 arcsec/pixel sampling.  The slit-jaw images were recorded from 14:46 to 16:58 UT with a cadence of 5 seconds to approximately match the cadence of the FIRS spectrograph, although the exposure time was only 200 msec.  The wavelengths seen by the slit-jaw imager  were longer than about 700 nm due to the beamsplitter needed for the IBIS \halpha{} channel, and the sensitivity of the silicon-based detector for the slit-jaw imager extends out to about 900 nm.
 
-Authors sometimes use color to highlight changes to their manuscript in
-response to editor and referee comments.  In \aastex\ new commands
-have been introduced to make this easier and formalize the process. 
+The data from FIRS was reduced using techniques similar to \citet{2012Jaegglietal}.  First, calibration data were assembled.  All images were first corrected for the non-linear response of the detector.  All frames from a single dark calibration were averaged together, and the nearest dark calibration in time was applied to the frames with light.  The lamp flat images were averaged together and dark-subtracted.  A raster scan of the grid target at the telescope main focus was corrected using the dark and lamp flat.  A frame from the center of the grid scan was used to determine the geometric correction to make the spectral and spatial coordinates orthogonal with linear dispersion, and match the coordinates between the dual beams for spectropolarimetry.
 
-The first method is through a new set of editing mark up commands that
-specifically identify what has been changed.  These commands are
-{\tt\string\added\{<text>\}}, {\tt\string\deleted\{<text>\}}, and
-{\tt\string\replaced\{<old text>\}\{<replaced text>\}}. To activate these
-commands the {\tt\string trackchanges} option must be used in the
-{\tt\string\documentclass} call.  When compiled this will produce the
-marked text in red.  The {\tt\string\explain\{<text>\}} can be used to add
-text to provide information to the reader describing the change.  Its
-output is purple italic font. To see how {\tt\string\added\{<important
-added info>\}}, {\tt\string\deleted\{<this can be deleted text>\}},
-{\tt\string\replaced\{<old data>\}\{<replaced data>\}}, and \break
-{\tt\string\explain\{<text explaining the change>\}} commands will produce
-\added{important added information}\deleted{, deleted text, and }
-\replaced{old data}{and replaced data,} toggle between versions compiled with
-and without the {\tt\string trackchanges} option.\explain{text explaining
-the change}
+A flat field for the science data was constructed using an observation of disk center with randomized motion to blur out spatial features.  All of the images from this dataset were corrected for linearity, dark subtracted, and averaged together.  The geometric correction was used to convert the spectrum between spatial/spectral and detector coordinates.  The average spatial and spectral profiles were obtained.  The hairlines crossing the slit were fit from the spatial profile and divided from the image so that these features would remain in the science observations.  The spectral lines were fit from the spectral profile using a Voigt function and then divided from the flat field observation.
 
-A summary list of all these tracking commands can be produced at the end of
-the article by adding the {\tt\string\listofchanges} just before the
-{\tt\string\end\{document\}} call.  The page number for each change will be
-provided. If the {\tt\string linenumbers} option is also included in the
-documentcall call then not only will all the lines in the article be
-numbered for handy reference but the summary list will also include the
-line number for each change.
+A pixel-by-pixel polarimetric correction using the method of \cite{2013Schad} was attempted using a calibration sequence obtained with the ASP calibration linear polarizer and waveplate near the DST main focus.  However, the derived solution did not seem to properly correct the science data, leaving large bias levels in the polarized states.  This may be due to changes in the IR detector linearity that were not properly corrected for by the lookup table.  Instead, a blind polarimetric demodulation was applied to the data, not correcting for instrumental polarization.  The resulting polarized spectra contain mostly Stokes V signal.  Application of ad-hoc techniques for determining and removing instrumental polarization, i.e. \citet{collados03}, would probably not be successful due to the lack of other polarized signal.  Magnetogram-style maps of the net polarized signal in the Si I line appear similar to the SOT/SP maps.
 
-The second method does not have the ability to highlight the specific
-nature of the changes but does allow the author to document changes over
-multiple revisions.  The commands are {\tt\string\edit1\{<text>\}},
-{\tt\string\edit2\{<text>\}} and {\tt\string\edit3\{<text>\}} and they
-produce {\tt\string<text>} that is highlighted in bold red, italic blue and
-underlined purple, respectively.  Authors should use the first command to
-\edit1{indicated which text has been changed from the first revision.}  The
-second command is to highlight \edit2{new or modified text from a second
-revision}.  If a third revision is needed then the last command should be used 
-\edit3{to show this changed text}.  Since over 90\% of all manuscripts are
-accepted after the 3rd revision these commands make it easy to identify
-what text has been added and when.  Once the article is accepted all the
-highlight color can be turned off simply by adding the
-{\tt\string\turnoffediting} command in the preamble. Likewise, the new commands
-{\tt\string\turnoffeditone}, {\tt\string\turnoffedittwo}, and
-{\tt\string\turnoffeditthree} can be used to only turn off the 
-{\tt\string\edit1\{<text>\}}, {\tt\string\edit2\{<text>\}} and 
-{\tt\string\edit3\{<text>\}}, respectively.
+Fiducials crossing the slit provide common features for co-aligning the slit in the vertical and horizontal directions with respect to the solar image.  During the reduction for the spectrograph data, the dark fiducial lines crossing the spectra were fit in each spectrum and then divided to remove them from the image.  The slit and fiducials were fit in each slit-jaw image before application of the flat field.  The fitted fiducial and slit positions were saved for the co-alignment step.
 
-Similar to marking editing changes with the {\tt\string\edit} options there
-are also the {\tt\string\authorcomments1\{<text>\}}, 
-{\tt\string\authorcomments2\{<text>\}} and
-{\tt\string\authorcomments3\{<text>\}} commands.  These produce the same
-bold red, italic blue and underlined purple text but when the
-{\tt\string\turnoffediting} command is present the {\tt\string<text>}
-material does not appear in the manuscript.  Authors can use these commands
-to mark up text that they are not sure should appear in the final
-manuscript or as a way to communicate comments between co-authors when
-writing the article.
+\subsection{IRIS}
+During the period 13:00:07 to 19:26:15 UT on 2017-03-21, IRIS performed 530 repeats of a program taking coarse 8-step rasters using a medium field of view with the slit aligned north-south.  The spectrograph field of view, of approximately 60 $\times$ 16 arcsec$^2$, was sampled in 2 arcsec steps by the 0.3 arcsec wide slit, while the silt-jaw imager had a 60 $\times$ 65 arcsec$^2$ instantaneous field of view centered on the spectrograph slit.  The spectrograph took 4 sec exposures at a 5.4 sec cadence with both the FUV and NUV spectrograph channels. The slit-jaw imager obtained images every 11 sec using the Si IV 1400 \AA\ filter channel, and images with the 2832 \AA\ Mg II line wing filter channel were taken every 44 sec to provide photospheric context.  IRIS observations were continuous in the time period and include several passages through the South Atlantic Anomaly, during which the observations show increased hot pixels due to particle strikes.
 
-\section{Software and third party data repository citations} \label{sec:cite}
+IRIS Level 2 data was obtained from the IRIS website, which also provided cutouts of the co-temporal AIA data.  Calibration of the IRIS data are described in \citet{wuelser18}.  IRIS Level 2 data is already co-aligned with AIA to a high degree of accuracy, so further co-alignment steps were not necessary.  An example of the IRIS SJI Si IV 1400 \AA\ image and NUV spectrum near the line core are shown in Figure \ref{fig:IRIS}.
 
-The AAS Journals would like to encourage authors to change software and
-third party data repository references from the current standard of a
-footnote to a first class citation in the bibliography.  As a bibliographic
-citation these important references will be more easily captured and credit
-will be given to the appropriate people.
+\begin{figure*}
+    \centering
+    \includegraphics[width=7in]{./figures/IRIS_example.eps}
+    \caption{An example of the IRIS Level 2 SJI and NUV spectrograph data near the time 15:47 UT.  The slit-jaw image is a composite of 4 images taken from 15:46:57.57 to 15:47:30.35 on 2017-03-21 to show the full field of view during the raster.  The slit positions for the 8-step coarse raster are shown over plotted on the SJI image in white.  The red slit indicates the position at which the NUV spectrum on the right was taken at 15:47:25.03.  The blue circle and crosshair shows the co-rotating ALMA field of view.}
+    \label{fig:IRIS}
+\end{figure*}
 
-The first step to making this happen is to have the data or software in
-a long term repository that has made these items available via a persistent
-identifier like a Digital Object Identifier (DOI).  A list of repositories
-that satisfy this criteria plus each one's pros and cons are given at \break
-\url{https://github.com/AASJournals/Tutorials/tree/master/Repositories}.
+\subsection{{\it Hinode} SOT}
+{\it Hinode} SOT Spectropolarimeter (SP) data was primarily taken from 14:00 UT to 18:46 UT with using 60 $\times$ 60 arcsec$^2$ fast maps with 0.3 arcsec spatial resolution with a $\sim$ 30 minute cadence. Additionally, the region of interest was observed sporadically over the 50 hours leading up to the coordinated observations, with FOVs of approximately $150\times160\unit{arcsec}^2$.  %The data was calibrated to level 2  using the BLAH method, and further reduced using Sarah's awesome skills. In total, this provided 7 maps of the region over the 50 hours leading up to the observation, and 10 maps of the region during the 4 hours of coordination.
+The SP instrument performance is described in \citet{2013Litesetal}.
 
-In the bibliography the format for data or code follows this format: \\
+The SP Level 2 data, reduced and inverted with the Milne-Eddington gRid Linear Inversion Network (MERLIN) code to produce maps of physical atmospheric parameters, including the vector magnetic field, were obtained from the Community Spectropolarimetric Analysis Center (CSAC, DOI:10.5065/D6JH3J8D).  See \citet{2013Lites&Ichimoto} for a description of the data reduction routines.
 
-\noindent author year, title, version, publisher, prefix:identifier\\
+\subsection{{\it Hinode} EIS}
+EIS conducted observations for the coordinated campaign from 14:00 UT to 21:21 on 2017-03-21. This instrument provides a wide range of diagnostics as described in \citet{2007Young}. Context slot rasters approximately three minutes in duration were taken at the beginning and end of the observation.  In between the slot rasters, EIS took sit-and-stare observations with 34 sec cadence. The sit-and-stare observations were interrupted by a 10 minute disk center synoptic observation at 19:40 UT.
+
+The EIS slot rasters covered a large region approximately $470\arcsec\times485\arcsec$ in 15 overlapping steps with spatial sampling of 1\arcsec\ per spatial pixel.  The sit-and-stare observations consisted of a 20\,s exposures with the 2\arcsec\ wide slit. Again, the spatial sampling along the slit was 1\arcsec\ per pixel. The detector readout for the spectra included all of the available wavelength ranges, but was limited to 256\arcsec\ along the slit. \saj{Where did the EIS data come from?  Harry probably got it from JSOC, I used VSO} The EIS data was processed using the default settings for the \verb+eis_prep+ routine in SSWIDL \citep{1998FreelandHandy_SSW}.  Intensities for the \ion{Fe}{12} 195.119\,\AA\ and \ion{He}{2} 256.317\,\AA\ lines were computed using multi-Gaussian fits \saj{reference or ssw routine name?}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=3.5in]{figures/EIS_example.eps}
+    \caption{A reconstructed slot raster image from the EIS \ion{Fe}{12} 195 \AA\ channel. The slot raster started at 14:00 UT.  The blue circle and crosshair show the ALMA co-rotating field of view.  The black rectangle shows the extent of the region covered by the EIS slit during the sit and stare observations.}
+    \label{fig:EIS}
+\end{figure}
+
+\subsection{{\it Hinode} XRT}
+XRT observed the active area from 12:33:12.311 -  18:59:27.511 UT with the Al\_poly filter, allowing plasma observations above $\sim$3 MK. The Al\_poly filter is one of the thinnest filters on XRT which has not been prohibitively impaired by contamination \citep[][]{2011NarukageEA_XRT3}, though some features of the contamination are still apparent. While the intended cadence was 4s, automatic exposure control increased the exposure time, which slowed the cadence to 16s per image. This large data set was prepped \citep[][]{2014KobelskiEA_xrtprep} and the methods of \citet{2015YoshimuraMcKenzie_XRTcoalign} were used to estimate offsets for co-alignment to the data to other instruments. Cross-correlation techniques \citep[such as {\tt tr\_get\_disp.pro} in SolarSoft;][]{1998FreelandHandy_SSW} are used to remove instrumental jitter and to self-align the XRT data with itself.
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/img0070}
+\caption{Reverse color and scaled XRT Al\_poly image from 16:32:14.6, when all instruments were observing. The blue contours show locations where TBs were detected throughout the data set from 16:11:00 - 17:22:37. The black circle is the approximate FOV of IBIS, the purple lines the slit positions of IRIS, and the orange box the slit location of EIS. While the slits are not directly on the bulk of the detections, they are located near the footpoints of detected X-ray activity.}\label{fig:xrt}
+\end{figure}
+
+The XRT data allow us to see the brightest thermal features in the region, which can be seen in Figure~\ref{fig:xrt}. Similar to the methods discussed in \citet{2014KobelskiEA_XRTTBs} and \citet{2014KobelskiMcKenzie_HiC}, we have searched for small, dynamic brightenings in the data. We can then extract light curves for the brightenings. In this data set, over 30 individual brightenings were found, most of which were found within the FOVs (spatially and temporally) of the the other instruments. As seen in Figure~\ref{fig:xrt}, a few TBs appear to line up with the locations of the EIS and IRIS slits, though it is important to note that full co-alignment between instruments has not yet been performed. Further analysis will be able to better detect and connect the TB activity and to determine whether there is increased and co-located chromospheric activity before and/or after these events.
 
 
 
-%% If you wish to include an acknowledgments section in your paper,
-%% separate it off from the body of the text using the \acknowledgments
-%% command.
+\section{Co-alignment} \label{sec:coalign}
+Co-aligning the various instruments was a challenge.  \figref{fig:coalign} graphically depicts how each data set was coaligned.
+Our general approach was to use the broad wavelength and height coverage of the various HMI and AIA channels as a ``ground-truth'' mapping between solar coordinates and morphological features seen within each dataset.  
+\begin{figure}[b]
+\centering
+\includegraphics[trim=200 100 100 100, clip, width=0.5\linewidth, angle=270]{figures/co-alignment.eps}
+\caption{Graphical representation of the coalignment process. SDO was utilized as the central coalignment reference, with other instruments co-aligned to it as possible. }\label{fig:coalign}
+\end{figure}
+The 2012 Venus transit allowed subarcsecond alignment of all the AIA and HMI channels\footnote{See the SDO Data Analysis Guide at \url{https://www.lmsal.com/sdodocs/doc/dcur/SDOD0060.zip/zip/entry/}, \S{}7.1 in the Sept 14, 2020 version of the document.}, which has since been maintained using Mercury transit observations, making SDO an excellent resource for this task.  
+Alignment was then verified by checking against datasets that had not been explicitly aligned with each other.
+For example, the IBIS broadband images were aligned to HMI continuum data and then that alignment was verified by checking the correspondence of enhanced emission in the \halpha{} line wings to the HMI magnetograms, SOT magnetograms, and UV emission in the 1600 and 1700\AA{} AIA channels. 
+
+Each data set has different temporal and spatial samplings and physical extent so no attempt was made to resample images from each instrument to a common temporoal/spatial grid.  
+Instead, the reduced and co-aligned datasets make use of the World Coordinate System (WCS) variant for solar physics defined in \citet{2006Thompson} and included in the FITS headers.  
+All data in this work uses helioprojective-cartesian coordinates, which can be transformed to any other coordinate system using standard routines in SSW, astropy, or sunpy.\par
+
+\subsection{DST/FIRS}
+FIRS data was co-aligned in two steps. First the FIRS slit-jaw images were co-aligned to HMI continuum intensity images from the 45s series, then the solar coordinates of the slit were mapped onto the spectrograph data.
+
+During the reduction of the FIRS slit-jaw images, the FIRS slit and hairlines crossing the slit were fit in each image before application of the flat field.  The pixel coordinates of the slit/hairline pairs were saved for use during the co-alignment step.  The dark hairlines also appear in the FIRS spectrograph images.  During the reduction of the spectrograph data, the positions of these were also determined and saved for later use.
+
+The reduced FIRS slit-jaw images were co-aligned to SDO/HMI intensity images from the 45 second series.  The approximate center coordinates of the FIRS slit-jaw were taken from the image headers which contain the telescope pointing near the time of the observation.  The spatial dispersion was estimated based on observations of the grid target.  The nearest HMI image in time was taken, and the coordinates were rotated to the time of the FIRS slit-jaw observation.  Using interpolation based on the estimated slit-jaw coordinates, a subfield was extracted from the HMI image.  X and Y shifts between the HMI sub-field and the slit-jaw image were determined using the SSW routine \verb+tr_get_disp+.  The spatial dispersion and rotation of the first image was adjusted by hand to achieve a good match, then the co-alignment of the entire image sequence was done using the same scale and rotation parameters.  The resulting coordinate mapping was used to transform the measured slit and hairline crossings into solar coordinates.  The FIRS slit-jaw images were written to FITS files with their updated coordinate information using the WCS standard.
+
+To get the FIRS spectrograph data into the solar coordinate frame, the coordinates of the slit/hairline crossings for the slit-jaw data series were interpolated at the time of FIRS spectrograph observation.  The slit/hairline solar coordinates were then used to determine the spatial dispersion along the slit, the solar X and Y coordinates at the center of the slit, and the rotation of the slit with respect to solar north assuming a linear mapping.  Each set of polarized spectra was then written to a FITS file with the spatial and spectral coordinates in the WCS standard.  The Stokes I spectrum was written in the main extension, and the Stokes Q, U, and V states were written to subsequent extensions with abbreviated headers.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=5in]{./figures/FIRS_example.eps}
+    \caption{co-aligned FIRS spectograph data from the beginning of the coordination taken between 14:46:48 and 15:00:55 UT on 2017-03-21.  The top two panels show the reconstructed maps of continuum and He I 10830 line intensity (left and right respectively).  The bottom panel shows the full Stokes I spectrum obtained with FIRS at 14:53:53 UT at the position indicated by the dashed line in each of the maps.  The blue circle and crosshair shows the co-rotating ALMA field of view.}
+    \label{fig:FIRS}
+\end{figure*}
+
+\subsection{Hinode SOT}
+%The Hinode SOT/SP parameter maps were resampled to a uniform coordinate grid, then aligned with HMI.
+
+For each Level 2 raster scan of SOT/SP, the solar coordinates of the slit at each raster position were differentially rotated from the observed time to a common time at the center of the scan (using the SSW routine \verb+drot_xy+).  The parameter maps were then resampled to a uniform coordinate grid.  HMI intensity observations closest in time to the center of the SOT/SP scan were selected and interpolated onto the same coordinate grid and the relative shift between HMI and the SOT/SP continuum intensity map was determined (using \verb+tr_get_disp+).  SOT/SP coordinates were updated with the corresponding shift.  An ad-hoc rotation angle of CROTA2=-0.6 deg and x-y pixel scale of 0.315 arcsec/pixel were determined with respect to HMI and applied simultaneously with the coordinate shift.  The resampled and co-aligned SOT/SP parameter maps were written to WCS-compliant FITS files where the main extension contains continuum intensity, and the inverted parameters are contained in additional FITS image extensions.  Figure \ref{fig:SOTSP} shows an example of the continuum intensity and LOS magnetic field for the last large raster taken before the coordination with ALMA commenced.
+
+\begin{figure*}
+    \begin{center}
+        \includegraphics[width=7in]{./figures/SOTSP_example.eps}
+    \end{center}
+    \caption{The co-aligned continuum intensity and line of sight magnetic field from the co-aligned Level 2 SOT/SP data based on inversion of the 630.2 nm Fe I lines.  The raster scan was run from 13:16:01 to 13:48:21 UT on 2017-03-21, and was the last large raster taken before the coordinated sequence began.  The blue circle and crosshair shows the co-rotating ALMA field of view.}
+    \label{fig:SOTSP}
+\end{figure*}
+
+\subsection{Hinode EIS}
+The EIS slit data were co-aligned to 12\,s, $202\arcsec\times456\arcsec$ 193\,\AA\ AIA cutouts obtained from JSOC. For each EIS exposure we convolved the full CCD spectrum with the AIA effective area for the 193\,\AA\ channel. We also resampled the AIA images to better match the cadence and plate scale of the EIS data. We then cross correlated the EIS intensities along the slit with the the intensities in the resampled AIA image taken closest in time to the EIS exposure. We computed correlations over a range of positions close to the commanded pointing and recorded the position with the highest correlation. An example of co-aligned EIS and AIA intensities is shown in Figure \figref{fig:eis_aia}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{./figures/eis_aia_108.pdf}
+    \caption{Co-aligned EIS and AIA data. The left panel shows an AIA 193\,\AA\ image with the position of the EIS slit indicated by the black line. The center panel shows the EIS and AIA intensities along the slit. Note that the EIS intensities here are computed by convolving the spectrum with the AIA effective area. Intensities derived from Gaussian fits to the line profile were also computed. The right panel shows the EIS exposure in the vicinity of the \ion{Fe}{12} 195.119\,\AA\ line. }
+    \label{fig:eis_aia}
+\end{figure}
+
+The EIS slot rasters at the beginning and end of the observations were also co-aligned to AIA 193 \AA\ images, but using a slightly different technique.  The EIS 195 \AA\ window was extracted for each slot position in the raster and the nearest AIA 193 \AA\ image in time was taken.  The EIS metadata values for rotation and spatial sampling of the EIS slot were adjusted, to $1^\circ$ and $1.00 \times 0.99$ arcsec respectively, for all slot data, and the center field position of each slot pointing was determined by eye to achieve a good match.  This rough pointing information was used to generate 2D helioprojective Cartesian coordinate arrays for the x and y coordinates of the image.  The AIA data was interpolated to the EIS coordinates, then the SSW routine \verb+tr_get_disp+ was used to determine the residual shift between the EIS and AIA images in an automated way.  These pixel shifts were then used to update the EIS coordinate arrays.
+
+FITS files containing the EIS slot raster and spectrograph sit-and-stare co-aligned coordinates arrays are available with the data release accompanying this publication.  These co-aligned coordinates are only valid for the EIS 195 \AA\ wavelength because EIS has a systematic vertical shift with wavelength due to a small tilt of the grating \citep[e.g.][]{young09}.  Coordinate shifts relative to this wavelength should be applied based on the \verb+eis_ccd_offset+ routine in SSW.  Interested users are encouraged to obtain the original EIS data from JSOC or other sources and prep it with the latest routines for further for analysis.
+
+
+\subsection{DST/IBIS}
+The IBIS broad band images were aligned to HMI continuum images in order to determine the final IBIS coordinates.
+All co-alignment steps used the \code{chi2\_shift} cross correlation routine and then were independently verified using the \code{phase\_cross\_correlation} routine from the \code{skimage.registration} Python package.
+The co-alignment process found a $1.08^\circ$ rotation of the IBIS data to align the pixel array with the solar North-South axis, while the coordinates of the center IBIS pixel were determined to be $(-76.041, -52.032)$ at time 2017-03-21 14:47:05.164.
+The center-pixel coordinates for all other times were then calculated from that $(x,y,t)$ triplet using the \code{solar\_rotate\_coordinate} routine from SunPy 2.0.3.
+The final offsets from the IBIS self-alignment described in \secref{sec:ibisselfalign} and the rotation to align pixel axes with solar X-Y axes were simultaneously applied to both the broad band and narrow band data using the \code{affine\_transform} interpolation routine from Sunpy. 
+
+Each IBIS FITS file contains data from a single exposure time, e.g., a single broad band and narrow band image pair.
+The final coordinates were saved in the WCS compliant CRVAL1 and CRVAL2 fields of the FITS header for each IBIS data file, which apply to both the broad band and narrow band images, as part of the primary FITS header.
+The broad band and narrow band data are saved in the first and second Image FITS extensions, respectively, along with additional header fields pertinent to each.
+Because of the limited FOV, disk-center location, and short duration $(\sim 2\unit{hr})$ of these data, we did not consider image distortion due to the curved surface of the Sun, as such corrections would enter at sub-pixel scales.\par
+
+The IBIS filenames have the format \texttt{IBIS.6563.YYYYMMDD\_HHMMSS\_NN.fits}, where the time information corresponds to the beginning of each spectral scan and the \code{\_NN} refers to the wavelength step of the file.
+This convention eases the analysis of data from specific wavelengths.
+\figref{fig:IBISgrid} shows representative IBIS data, including a broad band image of the solar granulation pattern and a subset of the wavelengths from the narrow band data.  The blue circle and cross shows the ALMA FOV at this time.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=7in]{./figures/IBIS_ALMAcirc_grid}
+    \caption{Co-aligned IBIS data for a partial scan through the \halpha{} line.  The scan began at 15:47:11.133UT and and lasted until 15:47:15.123, with approximately 0.165s between each narrow band image. The broad band data is in the upper left while remaining panels show a subset of the narrow band images.  The blue circle and crosshair shows the ALMA field of view at 15:47:13 UT.}
+    \label{fig:IBISgrid}
+\end{figure*}
+
+\subsection{ALMA}\label{sec:almaalign}
+As explained by \citet{2019Molnar}, variations in the Band-3 ALMA brightness temperature track variations in \halpha{} linewidth.
+We therefore co-aligned the ALMA data to the \halpha{} linewidths calculated using the method described in Section \secref{sec:linewidth}.
+The ALMA data were shifted and rotated to center the beam at the center of the pixel array and align solar north-south axis aligned with pixel columns.  
+The FOV center coordinates were then varied such that levelsets of the cotemporal ALMA and IBIS-\halpha{} data aligned at beginning of the ALMA data series at time 2017-03-21 15:42:13.  
+As with the IBIS data, the WCS compliant coordinate values `CRVAL1' and `CRVAL2' at all other times were calculated by rotating the co-aligned center pixel coordinates from the initial time using the Sunpy's \code{sunpy.physics.differential\_rotation.solar\_rotate\_coordinate()} routine.
+
+
+\section{Analysis}\label{sec:analysis}
+\subsection{Overview}
+To get a baseline qualitative understanding of how the active area evolved leading up to our primary observations we applied the segmentation and feature tracking algorithms described in \citet{2012Tarr} to the $\approx330\times250\arcsec{}$ cutout of HMI data between 2017-03-19 00:00 and 2017-03-21 23:46UT.  
+This analysis revealed fairly standard network behavior.
+Throughout the entire FOV, magnetic concentrations cyclically coalesce and fragment.
+On short timescales (several hours) the motion of flux concentrations appears coherent, but on longer time scales ($\sim1$ day) movement appears random.   
+
+However, the observed motions are not completely random.
+Our observations are centered on the bipolar grouping (positive magnetic fields to the West, negative to the East) shown in Figure \ref{fig:SOTSP} right.
+Despite the continual fragmentation and coalescence, the bipole is present for the duration of the HMI data and is associated with persistent, short, bright coronal loops in the EUV and X-Ray data.
+As described below, it is likely that the bipole emerged as a cohesive unit that is well into the decay phase, but it may simply be a long-lasting random bipolar concentration. 
+For ease of language we will refer to it as ``the bipole.''
+
+Considered from a global perspective, the positive polarity is parasitic within a roughly circular medium-scale ($\sim250\arcsec{}$ diameter) negative polarity region. 
+The medium scale negative polarity region is itself surrounded by a larger scale, predominantly positive polarity region that extends across both sides of the solar equator.
+This magnetic configuration makes the bipole topologically isolated from larger scale features: magnetic domains are layered somewhat like shells in an onion and we are interested in the dynamics of the inner layers.
+This larger-scale configuration will inform MHD simulations to be presented in future work.
+
+The pattern of a medium-scale dominant negative polarity surrounded by a larger scale positive polarity persisted for several solar rotations prior to our observations.
+The bipole we are looking at is likely the decaying remains of AR 12639 which emerged around 2017-02-24 at $\approx$(10S, 30W).
+
+Returning to the local scale of the bipole, overall during our observations it appears to be decaying, both by apparent direct cancellation between the two polarities and by fragmentation and separation of each polarity individually.
+The general decay of the bipole is complicated by two other factors: (1) nearby small-scale emergence, for example, around $(-475,-50)\arcsec{}$ at time 2017-03-19 13:45UT, acts to replenish the decaying flux of each polarity, and (2) surrounding network concentrations that do not seem associated with emergence also random-walk into the bipolar region and replenish lost flux.
+
+Finally, we note that immediately preceding our coordinated observations the parasitic positive polarity region of the bipole began an extended cycle of combined fragmentation and cancellation with the negative polarity of the bipole.  
+This activity continued throughout our observations and likely drives some of the dynamics we observe.
+
+\subsection{IBIS Linewidths}
+\label{sec:linewidth}
+We characterized the spectral profile of \halpha{} at every spatial and temporal point of the IBIS data.
+Figure \ref{fig:linefitexample} shows a typical example of the spectral data (green crosses), including the Telluric oxygen line $\approx1.4\AA{}$ reward of the \halpha{} line center.
+Fitting the spectral line serves dual purposes.
+First, as stated above in \secref{sec:almaalign} and reported on by \citet{2019Molnar}, the \halpha{} linewidth is extremely useful for aligning the ALMA Band 3 data; we discuss this at length in the following subsections.
+Second, the fitting produces several interesting plasma diagnostics of its own, including Doppler shifts and opacity fluctuations.
+
+Our characterization followed the method of \citet{2009Cauzzi}.
+First, we created a smooth model, $\hfit[\lambda]$ of the normalized spectra\footnote{Spectra at each spatial pixel at a given time were normalized to the intensity of the first measured wavelength position averaged over the central $600\times600$ pixels.  That wavelength is $6560.832$\AA{}, or $-1.9944$\AA{} relative to the center of the prefilter bandpass.} using the \scipy{} \fnc{interpolate} package, based on FITPACK.  
+Second, we determine the location of the line center by fitting a 3-parameter Gaussian absorption profile to the central 11 points in the line core, spanning -0.7505 to 0.5687 \AA{} from the center of the IBIS prefilter:
+\begin{equation}
+    G[\lambda; b, \linecenter, a] = b- \sqrt{\frac{\log2}{\pi a^2}}\exp\Bigl(-\frac{(\lambda - \linecenter)^2}{a^2\log2}\Bigr)
+\end{equation}
+where $b$ is the continuum level, $\linecenter$ is the line center, and $a$ is the half-width-at-half-max value.  
+We only use the line center value $\lambda_0$ of this fit because the fit to the line center is fairly good even though the \halpha{} line profile is poorly represented by a Gaussian.  \par
+
+We combine the fitted line center and the spline model to define the remaining characteristics of the line.  
+The value of the spline model at line center defines the minimum line intensity, $\imin{}=\hfit[\linecenter{}]$.  
+Next, the line intensity at half the line depth is defined as the halfway point between the minimum intensity and average of the intensities at $\pm0.75$\AA{} from \linecenter{}: 
+\begin{equation}
+    \ihalf = \frac{1}{2}\Bigl(\frac{\hfit[\linecenter-0.75\text{\AA{}}]+\hfit[\linecenter+0.75\text{\AA{}}]}{2}+\imin \Bigr).
+\end{equation}
+Finally, the line width \linew{} is defined to be the difference between roots of the equation \mbox{$\hfit[\lambda]-\ihalf = 0$}, that is, the width of the line at intensity \ihalf.
+\figref{fig:linefitexample} shows an example of the fitting method applied to a single profile.\par
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/line-fit-example-figure.pdf}
+    \caption{An example of the line fitting method, applied to the spectra at pixel $ix,iy=400,550$ at time 14:47:07.  The blue line with '+' symbols show the normalized spectra.  The green dashed line shows the spline interpolation to the data.  The orange line shows the gaussian fit to the spline model between $\approx-0.894$\AA{} and $0.8369$\AA{}.  \imin{} is marked by a red $\times$, the line intensities at $\linecenter\pm0.75$\AA{} by the green and purple dots, their average by the multi-color dot, the width--defining intensity level by the red stars, and the resulting line width by the dashed red line.}
+    \label{fig:linefitexample}
+\end{figure}
+
+We have verified the correlation between \halpha{} line widths and ALMA Band-3 brightness temperature, as reported by \citet{2019Molnar}.  \figref{fig:almaibis} shows an example, while an animation spanning the duration of the ALMA observations is available in the supplementary online material.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{figures/IBIS_wdth_ALMA_tb_0100.png}
+    \caption{\halpha{} line-core widths from IBIS (left) and the ALMA band 3 brightness temperature (right) at time 2017-03-21 15:45:34.  Contours of the ALMA brightness temperature are overlaid on both panels.  The white dashed circle shows the effective extent of ALMA's FOV.  An animation of this figure is available in the supplementary online material.}
+    \label{fig:almaibis}
+\end{figure*}
+
+\citet{2019Molnar} synthesized the radiative emission from a range of model atmospheres, representative of quiet-Sun to strong plage conditions, using the RH code \citep{2001Uitenbroek}.  Those results suggest that the broadening of \halpha{} as the chromospheric temperature rises is primarily an opacity effect due to an enhanced number density of H atoms in the $n=2$ quantum state, as opposed to broadening by thermal effects.  They explained this behavior, extensively referencing \citet{2012Leenaarts}, as follows \saj{colon?}.  The \halpha{} source function is nearly uniform throughout the chromosphere.  This feature gives \halpha{} its characteristic flat bottom, with fairly uniform intensity in wavelength moving away from line center, until a wavelength is reached at which the source function becomes sensitive to the photosphere, giving rise the the steep line wings.  As the formation height of the line core increases, the transition to photospheric-dominated emission occurs further in wavelength from the line center.  
+
+
+Now consider how this behavior changes as one varies the temperature of an atmospheric model.  Moving from cooler to hotter models, two important things happen simultaneously \citep[see][Fig.~5]{2019Molnar}: (1) the $\tau=1$ surfaces for the \halpha{} line core and the ALMA Band 3 emission begin to coincide; and (2) the contribution functions for each line become more spatially localized higher in the atmosphere.  Thus, in the hotter models, which produce the largest \halpha{} linewidths and highest ALMA Band 3 brightness temperatures, essentially all the \halpha{} absorption occurs in a thin range of heights at the interface between the chromosphere and transition region, and coincides with the ALMA Band 3 millimeter emission.  However, the above \halpha{} formation behavior, and the resulting correspondence between \halpha{} and ALMA millimeter emission, eventually breaks down for the hottest models that are most similar to active-regions, when the \halpha{} source function is no longer flat.  We do not expect this break down to occur for the region of enhanced network we have targeted in this data set, with the result that we find good correspondence between the \halpha{} line width and ALMA brightness temperature throughout our observations.
+\subsection{Interpretation of \halpha{} Doppler Shifts}
+
+The above argument explains the correlation between high brightness temperature ALMA Band 3 data and enhanced \halpha{} line widths, and the relation of both to enhanced photospheric magnetic concentrations.  It also shows how broader linewidths and greater brightness temperatures correspond to greater heights in the solar atmosphere, and how the line formation affects our understanding of the plasma properties.  The measured doppler velocities for regions with narrow linewidths should be systematically lower than doppler velocities from regions with greater linewidths.  The narrower lines form over a broad range of heights, allowing for effective canceling of coherent doppler signals, while the broader lines form over a narrower range of heights, so the doppler signal better represents coherent mass motions from localized regions. 
+ 
+My by-eye correlation between the doppler maps and the line-width maps seems to support this, but I haven’t done anything further with it.
+\latcomment{see email exchange 2020-02-20 between Tarr/Reardon/Uitenbroc/Momchil}.
+ 
+Also, I find a nearly gaussian distribution of doppler shifts of order $\pm0.05$\AA{} around the peak (FWHM), compared to line widths ranging from 0.9 to 1.3\AA{}.  The width distribution is odd, but I could see it as two very roughly peaked gaussians, centered at 1 and 1.2\AA{}, both with FWHM $\pm0.05$\AA{}.  That also makes for a consistent picture.
+
+We now turn to analyzing the temporal variations of these radiative diagnostics.
+
+\section{Conclusions}\label{sec:conclusion}
+The end
+
+\section{Noted dynamic events}
+We see numerous propagating disurbances in the \halpha{} linewidth.
+
+ALMA shows lots of oscillations, difficult to say if these are impulsive or not (ALMA is both low resolution and radiatively thick). 
+
+Many brightenings in XRT. A few can be connected through to IBIS.
+\begin{description}
+    {\item[NuSTAR]-potential events}
+    \begin{itemize}
+        {\item 19:04}
+        {\item 19:30}
+    \end{itemize}
+    {\item[IBIS]-potential events}
+        \begin{itemize}
+            {\item 14:53-14:58: propagating linewidth enhancement (-75,-40), (scan 158 )}
+            {\item 15:15-15:18: likely bogus, I think data is too poor to tell}
+            {\item 15:589-16:02: inflow to center of region (-55,-55).  See $d\lambda$ = 0.0320$\rightarrow$0.069}
+            {\item 16:20-16:22: propagating wavetrain outward from center around (-50,-40).  See running difference $d\lambda$ = -0.089, -0.075,0.057, 0.069.  Shows up especially well blue-wing intensity images at $d\lambda = -0.1, -0.089\unit{nm}$.  May start as early as 16:10?  Go from 16:10-16:30}
+        \end{itemize}
+    {\item[XRT] blah}
+    {\item[ALMA] blah}
+    {\item[IRIS] blah}
+\end{description}
+
+The 16:10 to 16:30 event appears to show energy transfer between the chromosphere to the corona and back along two different paths.
+The even starts as a strong dimming the \halpha{} blue wing, see especially the $-0.089\unit{nm}$ channel.  
+The dimming progresses roughly from SE to NW along the filament channel between the polarities of the bipole.
+The ALMA data show cospatial enhanced temperatures during this time.
+The dynamic event then becomes visible the hotter and higher data channels, especially AIA 304\AA{} and 193\AA{} followed by XRT.
+In all of these the brightenings again progress from SE to NW along the filament channel.
+The hotter channels then show a second loop brightening that partially overlaps the first but then extends southward from the negative concentration of the bipole towards a small flux concentration near the edge of the ALMA field of view.
+Finally we see a co-spatial and -temporal dimming in the \halpha{} blue wing and enhanced temperatures in ALMA at the southern terminus of the secondary loop. 
+
+
 \acknowledgments
+%DST
+The National Solar Observatory (NSO) is operated by the Association of Universities for Research in Astronomy, Inc. (AURA), under cooperative agreement with the National Science Foundation.  
+%IRIS
+IRIS is a NASA small explorer mission developed and operated by LMSAL with mission operations executed at NASA Ames Research center and major contributions to downlink communications funded by ESA and the Norwegian Space Center.
+%Hinode SOT/SP done in text
 
-We thank all the people that have made this AASTeX what it is today.  This
-includes but not limited to Bob Hanisch, Chris Biemesderfer, Lee Brotzman,
-Pierre Landau, Arthur Ogawa, Maxim Markevitch, Alexey Vikhlinin and Amy
-Hendrickson. Also special thanks to David Hogg and Daniel Foreman-Mackey
-for the new "modern" style design. Considerable help was provided via bug
-reports and hacks from numerous people including Patricio Cubillos, Alex
-Drlica-Wagner, Sean Lake, Michele Bannister, Peter Williams, and Jonathan
-Gagne.
+%ALMA
 
 %% To help institutions obtain information on the effectiveness of their 
 %% telescopes the AAS Journals has created a group of keywords for telescope 
@@ -307,16 +591,14 @@ Gagne.
 %% parentheses, after the keyword, but they are not verified.
 
 \vspace{5mm}
-\facilities{HST(STIS), Swift(XRT and UVOT), AAVSO, CTIO:1.3m,
-CTIO:1.5m,CXO}
+\facilities{ALMA, Dunn(FIRS, IBIS), IRIS, SDO(AIA, HMI)}
 
 %% Similar to \facility{}, there is the optional \software command to allow 
 %% authors a place to specify which programs were used during the creation of 
-%% the manusscript. Authors should list each code and include either a
+%% the manuscript. Authors should list each code and include either a
 %% citation or url to the code inside ()s when available.
 
-\software{astropy \citep{2013A&A...558A..33A}
-          }
+\software{astropy \citep{2013astropy,2018astropy} SHOULD INCLUDE: SUNPY, NUMPY, ADS, SSW}
 
 %% Appendix material should be preceded with a single \appendix command.
 %% There should be a \section command for each appendix. Mark appendix
@@ -327,17 +609,15 @@ CTIO:1.5m,CXO}
 %% command and will number appendix equations (A1), (A2), etc. The
 %% Figure and Table counter will not reset.
 
-\appendix
+\bibliographystyle{yahapj}
+\bibliography{references}
+%\comment{
+%\begin{thebibliography}{}
 
-\section{Appendix information}
+%\bibitem[Astropy Collaboration et al.(2013)]{2013A&A...558A..33A} Astropy Collaboration, Robitaille, T.~P., Tollerud, E.~J., et al.\ 2013, \aap, 558, A33 
 
-
-\begin{thebibliography}{}
-
-\bibitem[Astropy Collaboration et al.(2013)]{2013A&A...558A..33A} Astropy Collaboration, Robitaille, T.~P., Tollerud, E.~J., et al.\ 2013, \aap, 558, A33 
-
-\end{thebibliography}
-
+%\end{thebibliography}
+%}
 %% This command is needed to show the entire author+affilation list when
 %% the collaboration and author truncation commands are used.  It has to
 %% go at the end of the manuscript.
